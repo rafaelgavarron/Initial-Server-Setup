@@ -3,9 +3,9 @@ services:
     image: itzg/minecraft-bedrock-server
     container_name: mcpe-server
     restart: unless-stopped
-    environment:  
-      EULA: "TRUE"  
-      GAMEMODE: survival  
+    environment:
+      EULA: 'TRUE'
+      GAMEMODE: survival
       DIFFICULTY: hard
     ports:
       - 19132:19132
@@ -17,10 +17,10 @@ services:
     restart: always
     depends_on:
       # Make sure the minecraft service starts before the backup
-      - "bds"
+      - 'bds'
     environment:
-        # Without this, your log timestamps will be in the GMT timezone.
-        TZ: "America/Sao_Paulo"
+      # Without this, your log timestamps will be in the GMT timezone.
+      TZ: 'America/Sao_Paulo'
     volumes:
       # (Optional) Map a configuration folder separately from the backups.
       # - /minecraft/backup-config:/config
@@ -29,3 +29,14 @@ services:
       # Map your server's data folder wherever you like
       - ./minecraft/bds:/bds1
       - ./minecraft/config/config.yml:/config/config.yml
+
+    portainer:
+      image: portainer/portainer-ce:2.21.2
+      container_name: portainer
+      restart: always
+      ports:
+        - '8000:8000'
+        - '9443:9443'
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - portainer_data:/data
