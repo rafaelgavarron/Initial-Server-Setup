@@ -1,0 +1,18 @@
+schedule:
+  interval: 2m
+  onLastLogout: true
+
+trim:
+  trimDays: 2
+  keepDays: 14
+  minKeep: 2
+
+  bedrock:
+    name: bds # The hostname here is the name of the service in the compose YML.
+    ssh:
+      bds:2222
+      # itzg writes out the password as yaml to the root of /data
+    password: 57427f536e6f3852019236c0
+    passwordFile: ./bds/.remote-console.yaml
+    worlds:
+      - /bds/worlds/Pedreiros

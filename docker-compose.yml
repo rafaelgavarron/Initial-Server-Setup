@@ -7,8 +7,12 @@ services:
       EULA: 'TRUE'
       GAMEMODE: survival
       DIFFICULTY: hard
+      ENABLE_SSH: 'TRUE'
     ports:
       - 19132:19132
+    expose:
+      # This is a reminder that this port is exposed to other containers in this compose file.
+      - 2222
     volumes:
       - ./bds:/data
 
@@ -27,16 +31,16 @@ services:
       # Map your backups folder into /data
       - ./minecraft/backups:/data
       # Map your server's data folder wherever you like
-      - ./minecraft/bds:/bds1
-      - ./minecraft/config/config.yml:/config/config.yml
+      - ./bds:/bds
+      - ./backup-bds/config/:/config/
 
-    portainer:
-      image: portainer/portainer-ce:2.21.2
-      container_name: portainer
-      restart: always
-      ports:
-        - '8000:8000'
-        - '9443:9443'
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - portainer_data:/data
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - '8000:8000'
+      - '9443:9443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data:/data
