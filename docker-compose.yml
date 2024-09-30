@@ -1,0 +1,31 @@
+services:
+  bds:
+    image: itzg/minecraft-bedrock-server
+    container_name: mcpe-server
+    restart: unless-stopped
+    environment:  
+      EULA: "TRUE"  
+      GAMEMODE: survival  
+      DIFFICULTY: hard
+    ports:
+      - 19132:19132
+    volumes:
+      - ./bds:/data
+
+  backup:
+    image: kaiede/minecraft-bedrock-backup
+    restart: always
+    depends_on:
+      # Make sure the minecraft service starts before the backup
+      - "bds"
+    environment:
+        # Without this, your log timestamps will be in the GMT timezone.
+        TZ: "America/Sao_Paulo"
+    volumes:
+      # (Optional) Map a configuration folder separately from the backups.
+      # - /minecraft/backup-config:/config
+      # Map your backups folder into /data
+      - ./minecraft/backups:/data
+      # Map your server's data folder wherever you like
+      - ./minecraft/bds:/bds1
+      - ./minecraft/config/config.yml:/config/config.yml
